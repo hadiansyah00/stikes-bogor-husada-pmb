@@ -51,9 +51,8 @@
     </div>
   </section>
 </template>
-
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 const form = reactive({
   nama: '',
@@ -63,25 +62,51 @@ const form = reactive({
   programStudi: ''
 })
 
+const isLoading = ref(false)
+const successMessage = ref('')
+const errorMessage = ref('')
+
+const resetForm = () => {
+  form.nama = ''
+  form.kelas = ''
+  form.asalSekolah = ''
+  form.whatsapp = ''
+  form.programStudi = ''
+}
+
 const handleSubmit = async () => {
+  isLoading.value = true
+  successMessage.value = ''
+  errorMessage.value = ''
+
   try {
     const response = await $fetch('/api/form', {
       method: 'POST',
-      body: form
+      body: { ...form } // spread agar reactive tetap aman
     });
 
-    alert('Formulir berhasil dikirim!');
-    console.log('Response:', response);
+    console.log('Response:', response)
 
-    // Reset form
-    form.nama = '';
-    form.kelas = '';
-    form.asalSekolah = '';
-    form.whatsapp = '';
-    form.programStudi = '';
+    successMessage.value = 'Formulir berhasil dikirim!'
+    resetForm()
   } catch (error) {
-    console.error('Gagal mengirim:', error);
-    alert('Terjadi kesalahan saat mengirim formulir.');
+    console.error('Gagal mengirim:', error)
+    errorMessage.value = 'Terjadi kesalahan saat mengirim formulir.'
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
+
+<template>
+  <form @submit.prevent="handleSubmit" class="space-y-4">
+    <!-- Input fields here -->
+
+    <button type="submit" :disabled="isLoading" class="px-4 py-2 text-white bg-blue-500 rounded">
+      {{ isLoading ? 'Mengirim...' : 'Kirim' }}
+    </button>
+
+    <p v-if="successMessage" class="text-green-600">{{ successMessage }}</p>
+    <p v-if="errorMessage" class="text-red-600">{{ errorMessage }}</p>
+  </form>
+</template>

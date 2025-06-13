@@ -14,14 +14,20 @@ export default defineEventHandler(async (event) => {
             }
         });
 
-        // Siapkan pesan WhatsApp
-        const pesan = `Halo ${body.nama},\n\n` +
-            "Terima kasih telah mendaftar Beasiswa SNBT melalui formulir kami.\n\n" +
-            `📚 *Minat Prodi:* ${body.programStudi}\n` +
-            `🏫 *Asal Sekolah:* ${body.asalSekolah}\n` +
-            `📱 *Nomor WhatsApp:* ${body.whatsapp}\n\n` +
-            "Kami akan segera menghubungi Anda untuk informasi lebih lanjut.\n\n" +
-            "- ICT STIKes Bogor Husada";
+        // Pesan WhatsApp rapi
+        const pesan = `
+Halo ${body.nama},
+
+Terima kasih telah mendaftar Beasiswa SNBT melalui formulir kami.
+
+📚 *Minat Prodi:* ${body.programStudi}
+🏫 *Asal Sekolah:* ${body.asalSekolah}
+📱 *Nomor WhatsApp:* ${body.whatsapp}
+
+Kami akan segera menghubungi Anda untuk informasi lebih lanjut.
+
+- ICT STIKes Bogor Husada
+        `;
 
         const waPayload = {
             api_key: config.public.waApiKey,
