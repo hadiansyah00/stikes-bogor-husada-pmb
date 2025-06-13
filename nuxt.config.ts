@@ -1,16 +1,32 @@
 export default defineNuxtConfig({
-  ssr: true, // atau false jika SPA
+  ssr: true, // Set ke false jika hanya ingin SPA
   app: {
-    baseURL: '/', // jangan diubah kecuali pakai subfolder
+    baseURL: '/', // Ubah jika menggunakan subfolder
   },
+
   runtimeConfig: {
     public: {
-      googleScriptUrl: process.env.GOOGLE_SCRIPT_URL,
-      waApiKey: process.env.WA_API_KEY,
-      waNumberKey: process.env.WA_NUMBER_KEY
+      googleScriptUrl: process.env.GOOGLE_SCRIPT_URL || '',
+      waApiKey: process.env.WA_API_KEY || '',
+      waNumberKey: process.env.WA_NUMBER_KEY || ''
     }
   },
+
   modules: [
     '@nuxtjs/tailwindcss'
-  ]
+  ],
+
+  tailwindcss: {
+    viewer: false // Nonaktifkan Tailwind viewer di build
+  },
+
+  vite: {
+    css: {
+      devSourcemap: process.env.NODE_ENV === 'development', // Hanya aktif di dev mode
+    }
+  },
+
+  build: {
+    transpile: [] // Jika perlu transpile lib tertentu, masukkan di sini
+  }
 })
