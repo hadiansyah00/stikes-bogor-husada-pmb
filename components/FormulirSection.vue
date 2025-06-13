@@ -48,16 +48,20 @@
         <!-- No Whatsapp -->
         <div>
           <label class="block mb-2 font-medium text-orange-700">No WhatsApp</label>
-          <input
-            v-model="form.whatsapp"
-            type="tel"
-            class="w-full px-4 py-2 text-orange-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-            required
-            autocomplete="tel"
-            pattern="^(\+62|62|0)8[1-9][0-9]{6,10}$"
-            placeholder="08xxxxxxxxxx"
-          />
+          <div class="flex">
+            <span class="px-4 py-2 text-orange-600 bg-gray-100 border border-r-0 select-none rounded-l-md">+62</span>
+            <input
+              v-model="form.whatsapp"
+              type="tel"
+              class="w-full px-4 py-2 text-orange-600 border rounded-r-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+              required
+              autocomplete="tel"
+              placeholder="8xxxxxxxxx"
+              pattern="^8[1-9][0-9]{6,10}$" 
+            />
+          </div>
         </div>
+
 
         <!-- Minat Program Studi -->
         <div>
@@ -126,12 +130,22 @@ const handleSubmit = async () => {
   successMessage.value = ''
   errorMessage.value = ''
 
+  // Format nomor WA ke 62xxxx
+  let nomorWA = form.whatsapp;
+  if(nomorWA.startsWith('0')) {
+    nomorWA = '62' + nomorWA.slice(1);
+  } else if(nomorWA.startsWith('+62')) {
+    nomorWA = nomorWA.replace('+', '');
+  }
+
   try {
-    // Ganti $fetch dengan fetch jika tidak pakai Nuxt
     const response = await fetch('/api/form', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form })
+      body: JSON.stringify({ 
+        ...form, 
+        whatsapp: nomorWA // Kirim WA yang sudah diformat
+      })
     })
 
     if (!response.ok) throw new Error('Gagal mengirim data')
@@ -144,4 +158,5 @@ const handleSubmit = async () => {
     isLoading.value = false
   }
 }
+
 </script>
