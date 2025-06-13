@@ -8,37 +8,37 @@
         <!-- Nama Lengkap -->
         <div>
           <label class="block mb-2 font-medium text-orange-700">Nama Lengkap</label>
-          <input v-model="form.nama" type="text" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" required />
+          <input v-model="form.nama" type="text" class="w-full px-4 py-2 text-orange-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" required />
         </div>
 
         <!-- Kelas -->
         <div>
           <label class="block mb-2 font-medium text-orange-700">Kelas</label>
-          <input v-model="form.kelas" type="text" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" required />
+          <input v-model="form.kelas" type="text" class="w-full px-4 py-2 text-orange-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" required />
         </div>
 
         <!-- Asal Sekolah -->
         <div>
           <label class="block mb-2 font-medium text-orange-700">Asal Sekolah</label>
-          <input v-model="form.asalSekolah" type="text" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" required />
+          <input v-model="form.asalSekolah" type="text" class="w-full px-4 py-2 text-orange-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" required />
         </div>
 
         <!-- No Whatsapp -->
         <div>
           <label class="block mb-2 font-medium text-orange-700">No WhatsApp</label>
-          <input v-model="form.whatsapp" type="tel" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" required />
+          <input v-model="form.whatsapp" type="tel" class="w-full px-4 py-2 text-orange-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" required />
         </div>
 
         <!-- Minat Program Studi -->
         <div>
           <label class="block mb-2 font-medium text-orange-700">Minat Program Studi</label>
-            <select v-model="form.programStudi" class="w-full px-2 py-1 text-sm text-orange-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" required>
-              <option value="" disabled selected class="text-gray-400">Pilih Program Studi</option>
-              <option value="D3 Kebidanan" class="text-orange-600">D3 Kebidanan</option>
-              <option value="S1 Farmasi" class="text-orange-600">S1 Farmasi</option>
-              <option value="S1 Farmasi Kelas Karyawan" class="text-orange-600">S1 Farmasi Kelas Karyawan</option>
-              <option value="S1 Gizi" class="text-orange-600">S1 Gizi</option>
-            </select>
+          <select v-model="form.programStudi" class="w-full px-2 py-1 text-sm text-orange-600 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" required>
+            <option value="" disabled>Pilih Program Studi</option>
+            <option value="D3 Kebidanan">D3 Kebidanan</option>
+            <option value="S1 Farmasi">S1 Farmasi</option>
+            <option value="S1 Farmasi Kelas Karyawan">S1 Farmasi Kelas Karyawan</option>
+            <option value="S1 Gizi">S1 Gizi</option>
+          </select>
         </div>
 
         <!-- Tombol Submit -->
@@ -63,9 +63,25 @@ const form = reactive({
   programStudi: ''
 })
 
-const handleSubmit = () => {
-  console.log('Data dikirim:', form)
-  alert('Formulir berhasil dikirim!')
-  // Proses submit ke backend bisa ditambahkan di sini
+const handleSubmit = async () => {
+  try {
+    const response = await $fetch('/api/form', {
+      method: 'POST',
+      body: form
+    });
+
+    alert('Formulir berhasil dikirim!');
+    console.log('Response:', response);
+
+    // Reset form
+    form.nama = '';
+    form.kelas = '';
+    form.asalSekolah = '';
+    form.whatsapp = '';
+    form.programStudi = '';
+  } catch (error) {
+    console.error('Gagal mengirim:', error);
+    alert('Terjadi kesalahan saat mengirim formulir.');
+  }
 }
 </script>
