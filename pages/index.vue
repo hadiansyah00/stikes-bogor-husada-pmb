@@ -6,6 +6,7 @@
       <!-- <FormulirSection /> -->
     </main>
     <FormulirSection />
+    <BeritaMahasiswa />
     <AppFooter />
     <BackToTopButton />
   </div>

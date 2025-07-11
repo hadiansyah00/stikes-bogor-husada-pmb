@@ -42,7 +42,8 @@ export default defineNuxtConfig({
       googleScriptUrl: process.env.GOOGLE_SCRIPT_URL || "",
       waApiKey: process.env.WA_API_KEY || "",
       waNumberKey: process.env.WA_NUMBER_KEY || "",
-    },
+      API_BASE: process.env.NUXT_PUBLIC_API_BASE 
+        },
   },
 
   modules: ["@nuxtjs/tailwindcss"],
@@ -55,9 +56,17 @@ export default defineNuxtConfig({
     css: {
       devSourcemap: process.env.NODE_ENV === "development", // Hanya aktif di dev mode
     },
+    
+    server: {
+      
+    }
   },
 
   build: {
     transpile: [], // Jika perlu transpile lib tertentu, masukkan di sini
   },
+  devServer: {
+    port: 3001,
+    host: '0.0.0.0', // opsional, jika ingin diakses dari IP lokal/jaringan
+  }
 });
