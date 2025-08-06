@@ -15,7 +15,7 @@
 <script setup>
 // Anda bisa menambahkan logika atau data fetching di sini jika diperlukan
 useHead({
-  title: "Tike Beasiswa STIKes Bogor Husada - Jalur SNBT / SNBP 2025",
+  title: "Tiket Beasiswa STIKes Bogor Husada - Jalur SNBT / SNBP 2025",
   meta: [
     {
       name: "description",
