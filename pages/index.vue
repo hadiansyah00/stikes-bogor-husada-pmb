@@ -5,7 +5,7 @@
       <HeroSection />
       <!-- <FormulirSection /> -->
     </main>
-    <FormulirSection />
+    <!-- <FormulirSection /> -->
     <BeritaMahasiswa />
     <AppFooter />
     <BackToTopButton />
