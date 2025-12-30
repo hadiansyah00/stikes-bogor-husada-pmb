@@ -6,7 +6,11 @@
       <!-- <FormulirSection /> -->
     </main>
     <!-- <FormulirSection /> -->
-    <BeritaMahasiswa />
+    <!-- <BeritaMahasiswa /> -->
+    <SejarahSection />
+    <ProgramStudiSection />
+    <FormulirWaSection />
+    <LogoKemitraan />
     <AppFooter />
     <BackToTopButton />
   </div>
@@ -15,12 +19,12 @@
 <script setup>
 // Anda bisa menambahkan logika atau data fetching di sini jika diperlukan
 useHead({
-  title: "Tiket Beasiswa STIKes Bogor Husada - Jalur SNBT / SNBP 2025",
+  title: "Penerimaan Mahasiswa Baru STIKes Bogor Husada ",
   meta: [
     {
       name: "description",
       content:
-        "Daftar Beasiswa STIKes Bogor Husada sekarang dan raih kesempatan beas melalui jalur SNBT 2025. Jadilah bagian dari tenaga kesehatan profesional masa depan bersama kami!",
+        "Selamat datang di halaman resmi Penerimaan Mahasiswa Baru STIKes Bogor Husada. Daftar sekarang untuk memulai perjalanan pendidikan kesehatan Anda bersama kami!",
     },
   ],
 
