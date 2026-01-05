@@ -1,13 +1,15 @@
 export default defineNuxtConfig({
-  ssr: true,
-
+  ssr: true, // Set ke false jika hanya ingin SPA
   app: {
+    // Properti baseURL Anda yang sudah ada, JANGAN DIHAPUS
     baseURL: "/",
 
+    // Tambahkan properti 'head' di sini, di dalam 'app'
     head: {
+      // ... title, meta, dan link Anda yang lain bisa ditambahkan di sini
+
       script: [
         {
-          hid: "meta-pixel",
           innerHTML: `
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -19,17 +21,19 @@ export default defineNuxtConfig({
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '3852898454807503');
             fbq('track', 'PageView');
+            fbq('track', 'Lead');
+            fbq('track', 'CompleteRegistration');
           `,
+          body: true,
           type: "text/javascript",
           charset: "utf-8",
         },
       ],
-
       noscript: [
         {
-          hid: "meta-pixel-noscript",
           innerHTML:
-            '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3852898454807503&ev=PageView&noscript=1" />',
+            '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3852898454807503&ev=PageView&noscript=1%22" />',
+          body: true,
         },
       ],
     },
@@ -37,6 +41,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      googleScriptUrl: process.env.GOOGLE_SCRIPT_URL || "",
+      waApiKey: process.env.WA_API_KEY || "",
+      waNumberKey: process.env.WA_NUMBER_KEY || "",
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "https://sbh.ac.id",
       imageBaseUrl:
         process.env.NUXT_PUBLIC_IMAGE_BASE_URL || "https://sbh.ac.id",
@@ -45,8 +52,23 @@ export default defineNuxtConfig({
 
   modules: ["@nuxtjs/tailwindcss"],
 
+  tailwindcss: {
+    viewer: false, // Nonaktifkan Tailwind viewer di build
+  },
+
+  vite: {
+    css: {
+      devSourcemap: process.env.NODE_ENV === "development", // Hanya aktif di dev mode
+    },
+
+    server: {},
+  },
+
+  build: {
+    transpile: [], // Jika perlu transpile lib tertentu, masukkan di sini
+  },
   devServer: {
     port: 3001,
-    host: "0.0.0.0",
+    host: "0.0.0.0", // opsional, jika ingin diakses dari IP lokal/jaringan
   },
 });
