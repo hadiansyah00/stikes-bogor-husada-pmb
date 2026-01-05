@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 const { $fbTrack } = useNuxtApp();
 
 /* =========================
@@ -57,18 +57,34 @@ function normalizePhone(phone) {
 /* =========================
    SUBMIT FORM (LEAD POINT)
 ========================= */
-function submitForm() {
+async function submitForm() {
   if (!nama.value || !asalSekolah.value || !minatProdi.value || !noWa.value) {
     alert("Mohon lengkapi seluruh data terlebih dahulu.");
     return;
   }
 
-  // 🔥 FIRE META LEAD (POINT OF TRUTH)
+  // 1️⃣ FIRE META LEAD
   $fbTrack("Lead", {
     content_name: "Formulir PMB",
     content_category: "Pendaftaran",
   });
 
+  // 2️⃣ SIMPAN KE SPREADSHEET
+  await $fetch("/api/lead", {
+    method: "POST",
+    body: {
+      nama: nama.value,
+      asalSekolah: asalSekolah.value,
+      minatProdi: minatProdi.value,
+      noWa: noWa.value,
+      source: "Landing PMB",
+    },
+  });
+  $fbTrack("CompleteRegistration", {
+    content_name: "PMB SBH",
+  });
+
+  // 3️⃣ SUCCESS STATE
   showSuccess.value = true;
 }
 
@@ -91,6 +107,23 @@ Terima kasih.`;
   const url = `https://wa.me/${adminWa}?text=${encodeURIComponent(message)}`;
   window.open(url, "_blank");
 }
+
+/* =========================
+   WATCHERS (DEBUG)
+========================= */
+
+const redirectDelay = 2000; // 2 detik
+const isRedirecting = ref(false);
+
+watch(showSuccess, (val) => {
+  if (val) {
+    isRedirecting.value = true;
+
+    setTimeout(() => {
+      goToWhatsApp();
+    }, redirectDelay);
+  }
+});
 </script>
 <template>
   <section class="py-20 bg-gray-50 lg:py-28">
@@ -137,15 +170,26 @@ Terima kasih.`;
           class="p-6 mt-4 text-center border border-green-200 bg-green-50 rounded-xl"
         >
           <h3 class="text-lg font-bold text-green-700">Pendaftaran Berhasil</h3>
+
           <p class="mt-2 text-sm text-green-600">
-            Data Anda telah kami terima. Silakan lanjutkan ke WhatsApp.
+            Data Anda telah kami terima.
           </p>
 
+          <!-- LOADING -->
+          <div class="flex justify-center mt-4">
+            <span class="loader"></span>
+          </div>
+
+          <p class="mt-3 text-xs text-green-500">
+            Mengalihkan ke WhatsApp dalam 2 detik...
+          </p>
+
+          <!-- FALLBACK -->
           <button
             class="px-6 py-3 mt-4 font-bold text-white bg-green-600 rounded-xl hover:bg-green-700"
             @click="goToWhatsApp"
           >
-            Lanjut ke WhatsApp
+            Lanjut Sekarang
           </button>
         </div>
       </div>
@@ -178,6 +222,20 @@ Terima kasih.`;
 @keyframes blink {
   50% {
     opacity: 0;
+  }
+}
+.loader {
+  width: 36px;
+  height: 36px;
+  border: 4px solid #bbf7d0;
+  border-top: 4px solid #16a34a;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>

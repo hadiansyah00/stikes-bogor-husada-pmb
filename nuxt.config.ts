@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   app: {
     baseURL: "/",
 
+    /* =========================
+       META PIXEL (JANGAN DIUBAH)
+    ========================= */
     head: {
       script: [
         {
@@ -26,7 +29,7 @@ export default defineNuxtConfig({
             }(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '${
-              process.env.NUXT_PUBLIC_META_PIXEL_ID || "1203442778151114"
+              process.env.NUXT_PUBLIC_META_PIXEL_ID || "3852898454807503"
             }');
             fbq('track', 'PageView');
           `,
@@ -47,12 +50,18 @@ export default defineNuxtConfig({
     },
   },
 
+  /* =========================
+     RUNTIME CONFIG (FIXED)
+  ========================= */
   runtimeConfig: {
+    // 🔒 SERVER ONLY (AMAN)
+    GS_CLIENT_EMAIL: process.env.GS_CLIENT_EMAIL,
+    GS_PRIVATE_KEY: process.env.GS_PRIVATE_KEY,
+    GS_SPREADSHEET_ID: process.env.GS_SPREADSHEET_ID,
+
+    // 🌍 CLIENT PUBLIC
     public: {
-      metaPixelId: process.env.NUXT_PUBLIC_META_PIXEL_ID || "1203442778151114",
-      googleScriptUrl: process.env.GOOGLE_SCRIPT_URL || "",
-      waApiKey: process.env.WA_API_KEY || "",
-      waNumberKey: process.env.WA_NUMBER_KEY || "",
+      metaPixelId: process.env.NUXT_PUBLIC_META_PIXEL_ID,
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "https://sbh.ac.id",
       imageBaseUrl:
         process.env.NUXT_PUBLIC_IMAGE_BASE_URL || "https://sbh.ac.id",
@@ -68,15 +77,5 @@ export default defineNuxtConfig({
   devServer: {
     port: 3001,
     host: "0.0.0.0",
-  },
-
-  build: {
-    transpile: [],
-  },
-
-  vite: {
-    css: {
-      devSourcemap: process.env.NODE_ENV === "development",
-    },
   },
 });
