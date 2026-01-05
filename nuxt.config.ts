@@ -39,7 +39,7 @@ export default defineNuxtConfig({
           innerHTML: `
             <img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=${
-              process.env.NUXT_PUBLIC_META_PIXEL_ID || "1203442778151114"
+              process.env.NUXT_PUBLIC_META_PIXEL_ID || "3852898454807503"
             }&ev=PageView&noscript=1" />
           `,
         },
