@@ -1,20 +1,36 @@
 export default defineNuxtPlugin(() => {
-  if (typeof window === "undefined") return;
+  if (!process.client) return;
 
-  // Pastikan fbq sudah tersedia
   const fbq = (window as any).fbq;
-  if (!fbq) return;
+  if (!fbq) {
+    if (import.meta.dev) {
+      console.warn("[MetaPixel] fbq not found");
+    }
+    return;
+  }
 
-  /**
-   * Global helper untuk Meta Pixel
-   */
-  window.trackFB = (event: string, params: Record<string, any> = {}) => {
+  const track = (event: string, params: Record<string, any> = {}) => {
     try {
-      fbq("track", event, params);
+      const eventId = `${Date.now()}-${Math.random()
+        .toString(36)
+        .substring(2, 8)}`;
+
+      fbq("track", event, {
+        ...params,
+        event_id: eventId,
+      });
+
+      return eventId;
     } catch (err) {
       if (import.meta.dev) {
         console.warn("[MetaPixel]", err);
       }
     }
+  };
+
+  return {
+    provide: {
+      fbTrack: track,
+    },
   };
 });
