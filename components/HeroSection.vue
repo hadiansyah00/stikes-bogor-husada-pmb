@@ -6,7 +6,7 @@
         <div class="flex justify-center lg:justify-end">
           <img
             class="h-auto max-w-full rounded-lg shadow-xl"
-            src="/img/front-pages/landing-page/hero-2.jpg"
+            src="/img/front-pages/landing-page/hero.jpeg"
             alt="Mahasiswa STIKes Bogor Husada"
           />
         </div>

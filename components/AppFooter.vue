@@ -26,7 +26,7 @@
             <h3
               class="text-sm font-semibold tracking-wider uppercase text-white-200"
             >
-              Kontak
+              Hubungai Kami
             </h3>
             <ul class="mt-4 space-y-4">
               <li class="flex items-start gap-3">
@@ -111,7 +111,7 @@
                 </svg>
                 <span class="text-base text-white">
                   <span class="hidden sm:inline">Telp:&nbsp;</span>(0251)
-                  9576152
+                  8576152
                 </span>
               </li>
 

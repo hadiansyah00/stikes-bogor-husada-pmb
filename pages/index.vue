@@ -7,9 +7,10 @@
     </main>
     <!-- <FormulirSection /> -->
     <!-- <BeritaMahasiswa /> -->
+    <FormulirWaSection />
     <SejarahSection />
     <ProgramStudiSection />
-    <FormulirWaSection />
+    <TestimoniSlider />
     <LogoKemitraan />
     <AppFooter />
     <BackToTopButton />

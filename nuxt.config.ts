@@ -11,7 +11,7 @@ export default defineNuxtConfig({
       script: [
         {
           innerHTML: `
-            !function(f,b,e,v,n,t,s)
+           !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
             n.callMethod.apply(n,arguments):n.queue.push(arguments)};
             if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
@@ -21,6 +21,8 @@ export default defineNuxtConfig({
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '3852898454807503');
             fbq('track', 'PageView');
+            fbq('track', 'Lead');
+            fbq('track', 'CompleteRegistration');
           `,
           body: true,
           type: "text/javascript",
@@ -42,8 +44,10 @@ export default defineNuxtConfig({
       googleScriptUrl: process.env.GOOGLE_SCRIPT_URL || "",
       waApiKey: process.env.WA_API_KEY || "",
       waNumberKey: process.env.WA_NUMBER_KEY || "",
-      API_BASE: process.env.NUXT_PUBLIC_API_BASE 
-        },
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "https://sbh.ac.id",
+      imageBaseUrl:
+        process.env.NUXT_PUBLIC_IMAGE_BASE_URL || "https://sbh.ac.id",
+    },
   },
 
   modules: ["@nuxtjs/tailwindcss"],
@@ -56,10 +60,8 @@ export default defineNuxtConfig({
     css: {
       devSourcemap: process.env.NODE_ENV === "development", // Hanya aktif di dev mode
     },
-    
-    server: {
-      
-    }
+
+    server: {},
   },
 
   build: {
@@ -67,6 +69,6 @@ export default defineNuxtConfig({
   },
   devServer: {
     port: 3001,
-    host: '0.0.0.0', // opsional, jika ingin diakses dari IP lokal/jaringan
-  }
+    host: "0.0.0.0", // opsional, jika ingin diakses dari IP lokal/jaringan
+  },
 });

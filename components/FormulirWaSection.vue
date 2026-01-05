@@ -170,7 +170,7 @@ Terima kasih.`;
             type="submit"
             class="w-full py-3 font-bold text-white transition bg-orange-500 rounded-xl hover:bg-orange-600"
           >
-            Kirim ke WhatsApp
+            Daftar Sekarang
           </button>
         </form>
       </div>
