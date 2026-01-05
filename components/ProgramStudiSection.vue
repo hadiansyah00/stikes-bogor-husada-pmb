@@ -20,7 +20,7 @@ const programs = [
     description:
       "Menghasilkan tenaga profesional di bidang farmasi klinis, industri, dan penelitian.",
     image: "/img/prodi/s1-farmasi-stikes-bogor-husada.png",
-    link: "https://sbh.ac.id/s1-farmasi-stikes-bogor-husada",
+    link: "https://sbh.ac.id/program-studi-farmasi",
   },
   {
     id: "s1-gizi",
@@ -29,7 +29,7 @@ const programs = [
     description:
       "Mempersiapkan lulusan kompeten dalam pelayanan gizi masyarakat, klinis, dan penelitian.",
     image: "/img/prodi/s1-gizi-stikes-bogor-husada.png",
-    link: "https://sbh.ac.id/s1-gizi-stikes-bogor-husada",
+    link: "https://sbh.ac.id/program-studi-s1-gizi",
   },
 ];
 </script>
