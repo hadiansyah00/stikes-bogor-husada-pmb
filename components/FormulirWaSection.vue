@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from "vue";
+
 const { $fbTrack } = useNuxtApp();
+const config = useRuntimeConfig();
 
 /* =========================
    FORM STATE
@@ -54,8 +56,14 @@ function normalizePhone(phone) {
   return clean;
 }
 
+function handlePhoneInput(e) {
+  let value = e.target.value.replace(/\D/g, "");
+  if (value.length > 12) value = value.slice(0, 12);
+  noWa.value = value;
+}
+
 /* =========================
-   SUBMIT FORM (LEAD POINT)
+   SUBMIT FORM
 ========================= */
 async function submitForm() {
   if (!nama.value || !asalSekolah.value || !minatProdi.value || !noWa.value) {
@@ -63,29 +71,40 @@ async function submitForm() {
     return;
   }
 
-  // 1️⃣ FIRE META LEAD
+  // VALIDASI WA INDONESIA (11–12 digit, diawali 08)
+  if (!/^08\d{9,10}$/.test(noWa.value)) {
+    alert("Nomor WhatsApp harus diawali 08 dan terdiri dari 11–12 digit.");
+    return;
+  }
+
+  // 1️⃣ META LEAD
   $fbTrack("Lead", {
     content_name: "Formulir PMB",
     content_category: "Pendaftaran",
   });
 
   // 2️⃣ SIMPAN KE SPREADSHEET
-  await $fetch("/api/lead", {
-    method: "POST",
-    body: {
-      nama: nama.value,
-      asalSekolah: asalSekolah.value,
-      minatProdi: minatProdi.value,
-      noWa: noWa.value,
-      source: "Landing PMB",
-    },
-  });
-  $fbTrack("CompleteRegistration", {
-    content_name: "PMB SBH",
-  });
+  try {
+    await $fetch(`${config.public.apiBaseUrl}/api/lead`, {
+      method: "POST",
+      body: {
+        nama: nama.value,
+        asalSekolah: asalSekolah.value,
+        minatProdi: minatProdi.value,
+        noWa: noWa.value,
+        source: "Landing PMB",
+      },
+    });
 
-  // 3️⃣ SUCCESS STATE
-  showSuccess.value = true;
+    $fbTrack("CompleteRegistration", {
+      content_name: "PMB SBH",
+    });
+
+    showSuccess.value = true;
+  } catch (err) {
+    console.error("Gagal simpan data:", err);
+    alert("Terjadi kesalahan. Silakan coba kembali.");
+  }
 }
 
 /* =========================
@@ -109,22 +128,17 @@ Terima kasih.`;
 }
 
 /* =========================
-   WATCHERS (DEBUG)
+   AUTO REDIRECT
 ========================= */
-
-const redirectDelay = 2000; // 2 detik
-const isRedirecting = ref(false);
+const redirectDelay = 2000;
 
 watch(showSuccess, (val) => {
   if (val) {
-    isRedirecting.value = true;
-
-    setTimeout(() => {
-      goToWhatsApp();
-    }, redirectDelay);
+    setTimeout(goToWhatsApp, redirectDelay);
   }
 });
 </script>
+
 <template>
   <section class="py-20 bg-gray-50 lg:py-28">
     <div class="container max-w-4xl px-6 mx-auto lg:px-12">
@@ -159,7 +173,16 @@ watch(showSuccess, (val) => {
             <option>S1 Gizi (S.Gz)</option>
           </select>
 
-          <input v-model="noWa" placeholder="08xxxxxxxxxx" class="input" />
+          <input
+            v-model="noWa"
+            type="tel"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="12"
+            placeholder="08xxxxxxxxxx"
+            class="input"
+            @input="handlePhoneInput"
+          />
 
           <button type="submit" class="btn-primary">Daftar Sekarang</button>
         </form>
