@@ -71,21 +71,20 @@ async function submitForm() {
     return;
   }
 
-  // VALIDASI WA INDONESIA (11–12 digit, diawali 08)
   if (!/^08\d{9,10}$/.test(noWa.value)) {
-    alert("Nomor WhatsApp harus diawali 08 dan terdiri dari 11–12 digit.");
+    alert("Nomor WhatsApp harus 11–12 digit dan diawali 08.");
     return;
   }
 
-  // 1️⃣ META LEAD
-  $fbTrack("Lead", {
-    content_name: "Formulir PMB",
-    content_category: "Pendaftaran",
-  });
+  isSubmitting.value = true;
 
-  // 2️⃣ SIMPAN KE SPREADSHEET
   try {
-    await $fetch(`${config.public.API_URL_BASE}/api/lead`, {
+    $fbTrack("Lead", {
+      content_name: "Formulir PMB",
+      content_category: "Pendaftaran",
+    });
+
+    await $fetch(`${config.public.apiBaseUrl}/api/lead`, {
       method: "POST",
       body: {
         nama: nama.value,
@@ -102,8 +101,9 @@ async function submitForm() {
 
     showSuccess.value = true;
   } catch (err) {
-    console.error("Gagal simpan data:", err);
-    alert("Terjadi kesalahan. Silakan coba kembali.");
+    alert("Terjadi kesalahan, silakan coba kembali.");
+  } finally {
+    isSubmitting.value = false;
   }
 }
 
@@ -184,7 +184,18 @@ watch(showSuccess, (val) => {
             @input="handlePhoneInput"
           />
 
-          <button type="submit" class="btn-primary">Daftar Sekarang</button>
+          <button
+            type="submit"
+            class="flex items-center justify-center gap-2 btn-primary"
+            :disabled="isSubmitting"
+          >
+            <span v-if="!isSubmitting">Daftar Sekarang</span>
+
+            <span v-else class="flex items-center gap-2">
+              <span class="btn-loader"></span>
+              Memproses...
+            </span>
+          </button>
         </form>
 
         <!-- SUCCESS STATE -->
