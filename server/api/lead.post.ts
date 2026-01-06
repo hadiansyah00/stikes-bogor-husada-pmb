@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
     spreadsheetId: config.GS_SPREADSHEET_ID,
     range: "Sheet1!A:F",
     valueInputOption: "USER_ENTERED",
+    insertDataOption: "INSERT_ROWS", // ⬅️ INI KUNCI
     requestBody: {
       values: [
         [
