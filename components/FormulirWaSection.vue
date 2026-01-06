@@ -13,6 +13,7 @@ const minatProdi = ref("");
 const noWa = ref("");
 const adminWa = "6281110111560";
 const showSuccess = ref(false);
+const isSubmitting = ref(false); // ⬅️ INI KUNCI
 
 /* =========================
    TYPING EFFECT
@@ -271,5 +272,18 @@ watch(showSuccess, (val) => {
   100% {
     transform: rotate(360deg);
   }
+}
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 </style>
