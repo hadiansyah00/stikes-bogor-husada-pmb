@@ -85,7 +85,7 @@ async function submitForm() {
 
   // 2️⃣ SIMPAN KE SPREADSHEET
   try {
-    await $fetch(`${config.public.apiBaseUrl}/api/lead`, {
+    await $fetch(`${config.public.API_URL_BASE}/api/lead`, {
       method: "POST",
       body: {
         nama: nama.value,

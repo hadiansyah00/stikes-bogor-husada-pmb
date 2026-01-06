@@ -65,6 +65,7 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "https://sbh.ac.id",
       imageBaseUrl:
         process.env.NUXT_PUBLIC_IMAGE_BASE_URL || "https://sbh.ac.id",
+      API_URL_BASE: process.env.API_URL_BASE || "https://join.sbh.ac.id",
     },
   },
 
