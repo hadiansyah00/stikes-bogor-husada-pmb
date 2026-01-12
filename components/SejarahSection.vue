@@ -1,8 +1,8 @@
 <template>
   <section class="py-20 bg-gray-50 lg:py-28">
-    <div class="container max-w-4xl px-6 mx-auto lg:px-12">
+    <div class="container max-w-6xl px-6 mx-auto lg:px-12">
       <!-- HEADER -->
-      <div class="mb-10 text-center" data-aos="fade-up">
+      <div class="mb-12 text-center" data-aos="fade-up">
         <span
           class="inline-block px-4 py-1 mb-4 text-sm font-semibold text-orange-600 bg-orange-100 rounded-full"
         >
@@ -16,33 +16,46 @@
 
       <!-- CONTENT -->
       <div
-        class="p-8 bg-white shadow-sm rounded-2xl lg:p-10"
+        class="grid items-center gap-10 p-8 bg-white shadow-sm lg:grid-cols-2 lg:p-12 rounded-2xl"
         data-aos="fade-up"
         data-aos-delay="150"
       >
-        <p class="mb-5 leading-relaxed text-gray-700">
-          Kampus ini sebelumnya berbentuk Akademi Kebidanan Bogor Husada yang
-          berdiri pada tahun 2007. Seiring dengan perkembangan kebutuhan
-          pendidikan kesehatan, pada tahun 2019 lembaga ini resmi
-          bertransformasi menjadi Sekolah Tinggi Ilmu Kesehatan (STIKes) Bogor
-          Husada.
-        </p>
+        <!-- IMAGE -->
+        <div>
+          <img
+            src="/img/front-pages/landing-page/foto_utama_webb-1-1024x669.png"
+            alt="Gedung STIKes Bogor Husada"
+            loading="lazy"
+            class="object-cover w-full h-auto rounded-xl"
+          />
+        </div>
 
-        <p class="mb-5 leading-relaxed text-gray-700">
-          STIKes Bogor Husada memiliki komitmen kuat dalam menyelenggarakan
-          pendidikan di bidang kesehatan yang terintegrasi dengan praktik
-          profesional. Hal ini didukung melalui kerja sama dengan berbagai
-          institusi layanan kesehatan, salah satunya RS Azra Kota Bogor.
-        </p>
+        <!-- TEXT -->
+        <div class="space-y-5 text-gray-700">
+          <p class="leading-relaxed">
+            STIKes Bogor Husada merupakan institusi pendidikan tinggi kesehatan
+            yang berawal dari Akademi Kebidanan Bogor Husada yang berdiri sejak
+            tahun 2007 dan resmi bertransformasi menjadi STIKes pada tahun 2019.
+          </p>
 
-        <p class="leading-relaxed text-gray-700">
-          Saat ini, STIKes Bogor Husada mengelola beberapa program studi
-          unggulan yang berfokus pada pengembangan kompetensi akademik dan
-          praktik, antara lain D3 Kebidanan, S1 Farmasi, dan S1 Gizi. Lulusan
-          STIKes Bogor Husada dipersiapkan untuk berperan aktif dalam pelayanan
-          kesehatan, industri kefarmasian, serta sektor pendukung seperti rumah
-          sakit, apotek, restoran, dan layanan kesehatan masyarakat.
-        </p>
+          <p class="leading-relaxed">
+            Dalam penyelenggaraan pendidikan, STIKes Bogor Husada menekankan
+            integrasi antara pembelajaran akademik dan praktik profesional yang
+            didukung oleh jejaring institusi layanan kesehatan, termasuk
+            <span class="font-semibold text-gray-800">
+              Rumah Sakit Azra Kota Bogor </span
+            >.
+          </p>
+
+          <p class="leading-relaxed">
+            Saat ini, STIKes Bogor Husada menyelenggarakan program studi
+            <span class="font-semibold">
+              D3 Kebidanan, S1 Farmasi, dan S1 Gizi
+            </span>
+            untuk mempersiapkan lulusan yang kompeten dan siap berkontribusi di
+            berbagai sektor pelayanan kesehatan.
+          </p>
+        </div>
       </div>
     </div>
   </section>

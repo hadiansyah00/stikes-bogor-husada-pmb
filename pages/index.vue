@@ -10,6 +10,7 @@
     <FormulirWaSection />
     <SejarahSection />
     <ProgramStudiSection />
+    <KeunggulanSection />
     <TestimoniSlider />
     <LogoKemitraan />
     <AppFooter />
