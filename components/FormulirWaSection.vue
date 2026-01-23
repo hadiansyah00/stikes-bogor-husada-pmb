@@ -1,8 +1,6 @@
-<script setup>
-import { ref, onMounted, onUnmounted, watch } from "vue";
-
-const { $fbTrack } = useNuxtApp();
-const config = useRuntimeConfig();
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import { usePmbForm } from "@/composables/usePmbForm";
 
 /* =========================
    FORM STATE
@@ -11,221 +9,149 @@ const nama = ref("");
 const asalSekolah = ref("");
 const minatProdi = ref("");
 const noWa = ref("");
-const adminWa = "6281110111560";
-const showSuccess = ref(false);
-const isSubmitting = ref(false); // ⬅️ INI KUNCI
 
 /* =========================
-   TYPING EFFECT
+   COMPOSABLE
 ========================= */
-const fullText = "Formulir Pendaftaran";
-const typedText = ref("");
-const isDeleting = ref(false);
-let typingTimeout = null;
-
-onMounted(() => loopTyping());
-onUnmounted(() => typingTimeout && clearTimeout(typingTimeout));
-
-function loopTyping() {
-  const currentText = typedText.value;
-  let speed = 150;
-
-  if (isDeleting.value) {
-    typedText.value = fullText.substring(0, currentText.length - 1);
-    speed = 100;
-  } else {
-    typedText.value = fullText.substring(0, currentText.length + 1);
-  }
-
-  if (!isDeleting.value && typedText.value === fullText) {
-    speed = 2000;
-    isDeleting.value = true;
-  } else if (isDeleting.value && typedText.value === "") {
-    isDeleting.value = false;
-    speed = 500;
-  }
-
-  typingTimeout = setTimeout(loopTyping, speed);
-}
+const { submit, success, isSubmitting } = usePmbForm();
 
 /* =========================
    HELPERS
 ========================= */
-function normalizePhone(phone) {
-  let clean = phone.replace(/\D/g, "");
-  if (clean.startsWith("08")) clean = "628" + clean.slice(2);
-  return clean;
-}
+const isValidPhone = computed(() => /^08\d{9,10}$/.test(noWa.value));
 
-function handlePhoneInput(e) {
-  let value = e.target.value.replace(/\D/g, "");
+function handlePhoneInput(e: Event) {
+  let value = (e.target as HTMLInputElement).value.replace(/\D/g, "");
   if (value.length > 12) value = value.slice(0, 12);
   noWa.value = value;
 }
 
+const isFormValid = computed(
+  () =>
+    nama.value && asalSekolah.value && minatProdi.value && isValidPhone.value
+);
+
 /* =========================
-   SUBMIT FORM
+   SUBMIT
 ========================= */
-async function submitForm() {
-  if (!nama.value || !asalSekolah.value || !minatProdi.value || !noWa.value) {
-    alert("Mohon lengkapi seluruh data terlebih dahulu.");
-    return;
-  }
+async function onSubmit() {
+  if (!isFormValid.value || isSubmitting.value) return;
 
-  if (!/^08\d{9,10}$/.test(noWa.value)) {
-    alert("Nomor WhatsApp harus 11–12 digit dan diawali 08.");
-    return;
-  }
-
-  isSubmitting.value = true;
-
-  try {
-    $fbTrack("Lead", {
-      content_name: "Formulir PMB",
-      content_category: "Pendaftaran",
-    });
-
-    await $fetch(`${config.public.API_URL_BASE}/api/lead`, {
-      method: "POST",
-      body: {
-        nama: nama.value,
-        asalSekolah: asalSekolah.value,
-        minatProdi: minatProdi.value,
-        noWa: noWa.value,
-        source: "Landing PMB",
-      },
-    });
-
-    $fbTrack("CompleteRegistration", {
-      content_name: "PMB SBH",
-    });
-
-    showSuccess.value = true;
-  } catch (err) {
-    alert("Terjadi kesalahan, silakan coba kembali.");
-  } finally {
-    isSubmitting.value = false;
-  }
+  await submit({
+    nama: nama.value,
+    asalSekolah: asalSekolah.value,
+    minatProdi: minatProdi.value,
+    noWa: noWa.value,
+  });
 }
-
-/* =========================
-   REDIRECT WHATSAPP
-========================= */
-function goToWhatsApp() {
-  const userWa = normalizePhone(noWa.value);
-
-  const message = `Halo Admin STIKes Bogor Husada,
-
-Saya ingin mendaftar PMB dengan data berikut:
-Nama Lengkap: ${nama.value}
-Asal Sekolah: ${asalSekolah.value}
-Minat Program Studi: ${minatProdi.value}
-Nomor WhatsApp: ${userWa}
-
-Terima kasih.`;
-
-  const url = `https://wa.me/${adminWa}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank");
-}
-
-/* =========================
-   AUTO REDIRECT
-========================= */
-const redirectDelay = 2000;
-
-watch(showSuccess, (val) => {
-  if (val) {
-    setTimeout(goToWhatsApp, redirectDelay);
-  }
-});
 </script>
 
 <template>
   <section class="py-20 bg-gray-50 lg:py-28">
     <div class="container max-w-4xl px-6 mx-auto lg:px-12">
+      <!-- HEADER -->
       <div class="mb-12 text-center">
         <h2 class="text-3xl font-bold text-gray-800 lg:text-4xl">
-          {{ typedText }}<span class="typing-cursor">|</span>
+          Formulir Pendaftaran
         </h2>
         <p class="max-w-xl mx-auto mt-4 text-gray-600">
-          Silakan lengkapi data berikut untuk mendapatkan informasi pendaftaran
-          STIKes Bogor Husada.
+          Isi data berikut untuk mendapatkan informasi resmi Penerimaan
+          Mahasiswa Baru STIKes Bogor Husada.
         </p>
       </div>
 
+      <!-- FORM CARD -->
       <div class="p-8 bg-white shadow-sm rounded-2xl lg:p-10">
-        <form
-          v-if="!showSuccess"
-          @submit.prevent="submitForm"
-          class="space-y-6"
-        >
-          <input v-model="nama" placeholder="Nama lengkap" class="input" />
-          <input
-            v-model="asalSekolah"
-            placeholder="Asal sekolah"
-            class="input"
-          />
+        <!-- FORM -->
+        <form v-if="!success" @submit.prevent="onSubmit" class="space-y-6">
+          <!-- NAMA -->
+          <div>
+            <label class="label">Nama Lengkap</label>
+            <input
+              v-model="nama"
+              type="text"
+              placeholder="Nama sesuai ijazah"
+              class="input"
+            />
+          </div>
 
-          <select v-model="minatProdi" class="input">
-            <option value="" disabled>-- Pilih Program Studi --</option>
-            <option>D3 Kebidanan (A.Md.Keb)</option>
-            <option>S1 Farmasi (S.Farm)</option>
-            <option>S1 Farmasi Karyawan</option>
-            <option>S1 Gizi (S.Gz)</option>
-          </select>
+          <!-- ASAL SEKOLAH -->
+          <div>
+            <label class="label">Asal Sekolah</label>
+            <input
+              v-model="asalSekolah"
+              type="text"
+              placeholder="SMA / SMK / MA"
+              class="input"
+            />
+          </div>
 
-          <input
-            v-model="noWa"
-            type="tel"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            maxlength="12"
-            placeholder="08xxxxxxxxxx"
-            class="input"
-            @input="handlePhoneInput"
-          />
+          <!-- PRODI -->
+          <div>
+            <label class="label">Minat Program Studi</label>
+            <select v-model="minatProdi" class="input">
+              <option value="" disabled>-- Pilih Program Studi --</option>
+              <option>D3 Kebidanan (A.Md.Keb)</option>
+              <option>S1 Farmasi (S.Farm)</option>
+              <option>S1 Farmasi Karyawan</option>
+              <option>S1 Gizi (S.Gz)</option>
+            </select>
+          </div>
 
+          <!-- WHATSAPP -->
+          <div>
+            <label class="label">Nomor WhatsApp</label>
+            <input
+              v-model="noWa"
+              type="tel"
+              inputmode="numeric"
+              maxlength="12"
+              placeholder="08xxxxxxxxxx"
+              class="input"
+              @input="handlePhoneInput"
+            />
+            <p v-if="noWa && !isValidPhone" class="mt-1 text-xs text-red-500">
+              Nomor harus diawali 08 dan berjumlah 11–12 digit
+            </p>
+          </div>
+
+          <!-- SUBMIT -->
           <button
             type="submit"
-            class="flex items-center justify-center gap-2 btn-primary"
-            :disabled="isSubmitting"
+            class="btn-primary"
+            :disabled="!isFormValid || isSubmitting"
           >
             <span v-if="!isSubmitting">Daftar Sekarang</span>
-
-            <span v-else class="flex items-center gap-2">
+            <span v-else class="flex items-center justify-center gap-2">
               <span class="btn-loader"></span>
               Memproses...
             </span>
           </button>
+
+          <!-- TRUST -->
+          <p class="text-xs text-center text-gray-500">
+            Data Anda aman dan hanya digunakan untuk keperluan PMB
+          </p>
         </form>
 
-        <!-- SUCCESS STATE -->
+        <!-- SUCCESS STATE (TANPA LOADING) -->
         <div
           v-else
-          class="p-6 mt-4 text-center border border-green-200 bg-green-50 rounded-xl"
+          class="p-6 text-center border border-green-200 bg-green-50 rounded-xl"
         >
-          <h3 class="text-lg font-bold text-green-700">Pendaftaran Berhasil</h3>
+          <h3 class="text-lg font-bold text-green-700">
+            Pendaftaran Berhasil 🎉
+          </h3>
 
           <p class="mt-2 text-sm text-green-600">
-            Data Anda telah kami terima.
+            Terima kasih <strong>{{ nama }}</strong
+            >, data pendaftaran Anda telah berhasil kami terima.
           </p>
 
-          <!-- LOADING -->
-          <div class="flex justify-center mt-4">
-            <span class="loader"></span>
-          </div>
-
-          <p class="mt-3 text-xs text-green-500">
-            Mengalihkan ke WhatsApp dalam 2 detik...
+          <p class="mt-2 text-sm text-green-600">
+            Tim PMB STIKes Bogor Husada akan menghubungi Anda melalui WhatsApp
+            berdasarkan data yang telah dikirim.
           </p>
-
-          <!-- FALLBACK -->
-          <button
-            class="px-6 py-3 mt-4 font-bold text-white bg-green-600 rounded-xl hover:bg-green-700"
-            @click="goToWhatsApp"
-          >
-            Lanjut Sekarang
-          </button>
         </div>
       </div>
     </div>
@@ -233,48 +159,40 @@ watch(showSuccess, (val) => {
 </template>
 
 <style scoped>
+.label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
 .input {
   width: 100%;
   padding: 12px;
   border: 1px solid #d1d5db;
   border-radius: 12px;
   background-color: #ffffff;
-  color: #111827; /* ⬅️ INI KUNCI */
+  color: #111827;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
 }
 
 .btn-primary {
   width: 100%;
-  padding: 12px;
-  font-weight: bold;
-  color: white;
-  background: #f97316;
+  padding: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #f97316;
   border-radius: 12px;
 }
-.typing-cursor {
-  animation: blink 1s infinite;
-  color: #f97316;
-}
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-.loader {
-  width: 36px;
-  height: 36px;
-  border: 4px solid #bbf7d0;
-  border-top: 4px solid #16a34a;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
 
-@keyframes spin {
-  100% {
-    transform: rotate(360deg);
-  }
-}
 .btn-primary:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -285,5 +203,11 @@ watch(showSuccess, (val) => {
   border-top: 2px solid #ffffff;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

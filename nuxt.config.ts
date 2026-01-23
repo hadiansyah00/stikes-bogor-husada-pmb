@@ -58,6 +58,9 @@ export default defineNuxtConfig({
     GS_CLIENT_EMAIL: process.env.GS_CLIENT_EMAIL,
     GS_PRIVATE_KEY: process.env.GS_PRIVATE_KEY,
     GS_SPREADSHEET_ID: process.env.GS_SPREADSHEET_ID,
+    WABLAS_API_KEY: process.env.WABLAS_API_KEY,
+    WABLAS_SECRET_KEY: process.env.WABLAS_SECRET_KEY,
+    WABLAS_ADMIN_WA: process.env.WABLAS_ADMIN_WA,
 
     // 🌍 CLIENT PUBLIC
     public: {
