@@ -5,32 +5,38 @@
       <HeroSection />
       <!-- <FormulirSection /> -->
     </main>
-    <FormulirSection />
+    <!-- <FormulirSection /> -->
+    <!-- <BeritaMahasiswa /> -->
+    <CallToAction />
+    <FormulirWaSection />
+    <SejarahSection />
+    <ProgramStudiSection />
+    <KeunggulanSection />
+    <TestimoniSlider />
+    <LogoKemitraan />
     <AppFooter />
     <BackToTopButton />
   </div>
 </template>
+<script setup lang="ts">
+import { onMounted } from "vue";
 
-<script setup>
-// Anda bisa menambahkan logika atau data fetching di sini jika diperlukan
 useHead({
-  title: "Tike Beasiswa STIKes Bogor Husada - Jalur SNBT / SNBP 2025",
+  title: "Penerimaan Mahasiswa Baru STIKes Bogor Husada",
   meta: [
     {
       name: "description",
       content:
-        "Daftar Beasiswa STIKes Bogor Husada sekarang dan raih kesempatan beas melalui jalur SNBT 2025. Jadilah bagian dari tenaga kesehatan profesional masa depan bersama kami!",
+        "Selamat datang di halaman resmi Penerimaan Mahasiswa Baru STIKes Bogor Husada. Daftar sekarang untuk memulai perjalanan pendidikan kesehatan Anda bersama kami!",
     },
   ],
-
   script: [
     {
       src: "https://cdn.watzap.id/widget-api.js",
       async: true,
-      "data-watzapkey": "xgWw1957", // Use quotes for attributes with hyphens
+      "data-watzapkey": "xgWw1957",
     },
   ],
-  // --- TAMBAHKAN BAGIAN INI UNTUK FAVICON ---
   link: [
     {
       rel: "icon",
@@ -38,5 +44,13 @@ useHead({
       href: "/img/logo/logo_sbh_bulet.png",
     },
   ],
+});
+
+onMounted(() => {
+  // Event view landing page
+  window.trackFB?.("ViewContent", {
+    content_name: "Landing PMB STIKes Bogor Husada",
+    content_category: "PMB",
+  });
 });
 </script>

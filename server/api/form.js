@@ -5,34 +5,43 @@ export default defineEventHandler(async (event) => {
 
     const config = useRuntimeConfig();
 
-    // Kirim ke Google Script
+    // Buat timestamp Indonesia (format dd-MM-yyyy HH:mm:ss)
+    const timestamp = new Date().toLocaleString("id-ID", {
+      timeZone: "Asia/Jakarta",
+    });
+
+    // Kirim ke Google Script (supaya masuk ke Google Sheet)
     const googleRes = await $fetch(config.public.googleScriptUrl, {
       method: "POST",
-      body,
+      body: {
+        ...body,
+        timestamp, // tambahkan timestamp ke data
+      },
       headers: {
         "Content-Type": "application/json",
       },
     });
 
-    // Pesan WhatsApp rapi
+    // Pesan WhatsApp rapi dengan timestamp
     const pesan = `Halo ${body.nama}!
-    Selamat! Kamu telah berhasil mendaftar Tiket Beasiswa Jalur SNBP/SNBT STIKes Bogor Husada.
+Selamat! Kamu telah berhasil mendaftar Tiket Beasiswa Jalur SNBP/SNBT STIKes Bogor Husada.
 
-    ✅ Berikut data pendaftaran Anda:
-    Minat Program Studi: ${body.programStudi}
-    Asal Sekolah: ${body.asalSekolah}
-    Nomor WhatsApp: ${body.whatsapp}
+✅ Berikut data pendaftaran Anda:
+Minat Program Studi: ${body.programStudi}
+Asal Sekolah: ${body.asalSekolah}
+Nomor WhatsApp: ${body.whatsapp}
+Waktu Pendaftaran: ${timestamp}
 
-    Bersama pendaftaran ini, kamu berhak mendapatkan:
-    * Beasiswa Biaya Kuliah Gelombang 1
-    * Gratis Laptop
-    * Bebas Tes Tulis
-    * Free Biaya Pendaftaran
+Bersama pendaftaran ini, kamu berhak mendapatkan:
+* Beasiswa Biaya Kuliah Gelombang 1
+* Gratis Laptop
+* Bebas Tes Tulis
+* Free Biaya Pendaftaran
 
-    Informasi pendaftaran ini sudah tercatat di sistem kami.
-    Jangan khawatir, semua informasi penting akan kami kirimkan langsung ke WhatsApp kamu.
-    Jika ada pertanyaan, silakan hubungi kami kapan saja.
-    `;
+Informasi pendaftaran ini sudah tercatat di sistem kami.
+Jangan khawatir, semua informasi penting akan kami kirimkan langsung ke WhatsApp kamu.
+Jika ada pertanyaan, silakan hubungi kami kapan saja.
+`;
 
     const waPayload = {
       api_key: config.public.waApiKey,
