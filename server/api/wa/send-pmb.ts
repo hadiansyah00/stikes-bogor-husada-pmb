@@ -1,8 +1,8 @@
 import { sendWablasMessage } from "@/server/utils/wablas";
+import { appendPmbLead } from "@/server/utils/googleSheets";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-
   const { nama, asalSekolah, minatProdi, noWa } = body;
 
   if (!nama || !asalSekolah || !minatProdi || !noWa) {
@@ -12,34 +12,32 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const config = useRuntimeConfig();
+  // 1️⃣ Simpan ke Google Spreadsheet
+  await appendPmbLead({
+    nama,
+    asalSekolah,
+    minatProdi,
+    noWa,
+  });
 
-  const adminWa = config.WABLAS_ADMIN_WA;
+  // 2️⃣ Kirim WA ke user
+  const userMessage = `📌 *KONFIRMASI PENDAFTARAN PMB*
+STIKes Bogor Husada
 
-  // Pesan ke ADMIN
-  const adminMessage = `📌 PENDAFTARAN PMB SBH
+Berikut data Anda:
+👤 Nama : ${nama}
+🏫 Asal Sekolah : ${asalSekolah}
+🎓 Minat Prodi : ${minatProdi}
+📱 WhatsApp : ${noWa}
 
-Nama Lengkap : ${nama}
-Asal Sekolah : ${asalSekolah}
-Minat Prodi  : ${minatProdi}
-No WhatsApp  : ${noWa}
+Tim PMB akan menghubungi Anda maksimal *1x24 jam*.
 
-📅 Sumber: Landing PMB
-🌐 STIKes Bogor Husada`;
-
-  await sendWablasMessage(adminWa, adminMessage);
-
-  // Pesan AUTO-REPLY ke USER
-  const userMessage = `Halo ${nama} 👋
-
-Terima kasih telah mendaftar di STIKes Bogor Husada.
-Tim PMB kami akan menghubungi Anda maksimal 1x24 jam.
-
-🙏`;
+🙏 Terima kasih`;
 
   await sendWablasMessage(noWa, userMessage);
 
   return {
     success: true,
+    message: "Lead berhasil disimpan & WA terkirim",
   };
 });
