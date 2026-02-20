@@ -28,7 +28,7 @@ function handlePhoneInput(e: Event) {
 
 const isFormValid = computed(
   () =>
-    nama.value && asalSekolah.value && minatProdi.value && isValidPhone.value
+    nama.value && asalSekolah.value && minatProdi.value && isValidPhone.value,
 );
 
 /* =========================
@@ -45,37 +45,32 @@ async function onSubmit() {
   });
 }
 </script>
-
 <template>
-  <section class="py-20 bg-gray-50 lg:py-28">
+  <section id="formulir" class="py-20 bg-gray-50 lg:py-28">
     <div class="container max-w-4xl px-6 mx-auto lg:px-12">
-      <!-- HEADER -->
       <div class="mb-12 text-center">
         <h2 class="text-3xl font-bold text-gray-800 lg:text-4xl">
-          Formulir Pendaftaran
+          Cek Info Biaya Kuliah & Amankan Promo Laptop Gratis!
         </h2>
         <p class="max-w-xl mx-auto mt-4 text-gray-600">
-          Isi data berikut untuk mendapatkan informasi resmi Penerimaan
-          Mahasiswa Baru STIKes Bogor Husada.
+          Isi data singkat ini supaya admin kami bisa mengirimkan info biaya
+          kuliah, jalur masuk, dan cara mengamankan promo Laptop Gratis sebelum
+          kuota habis.
         </p>
       </div>
 
-      <!-- FORM CARD -->
       <div class="p-8 bg-white shadow-sm rounded-2xl lg:p-10">
-        <!-- FORM -->
         <form v-if="!success" @submit.prevent="onSubmit" class="space-y-6">
-          <!-- NAMA -->
           <div>
             <label class="label">Nama Lengkap</label>
             <input
               v-model="nama"
               type="text"
-              placeholder="Nama sesuai ijazah"
+              placeholder="Nama Kamu"
               class="input"
             />
           </div>
 
-          <!-- ASAL SEKOLAH -->
           <div>
             <label class="label">Asal Sekolah</label>
             <input
@@ -86,7 +81,6 @@ async function onSubmit() {
             />
           </div>
 
-          <!-- PRODI -->
           <div>
             <label class="label">Minat Program Studi</label>
             <select v-model="minatProdi" class="input">
@@ -98,7 +92,6 @@ async function onSubmit() {
             </select>
           </div>
 
-          <!-- WHATSAPP -->
           <div>
             <label class="label">Nomor WhatsApp</label>
             <input
@@ -115,26 +108,23 @@ async function onSubmit() {
             </p>
           </div>
 
-          <!-- SUBMIT -->
           <button
             type="submit"
             class="btn-primary"
             :disabled="!isFormValid || isSubmitting"
           >
-            <span v-if="!isSubmitting">Daftar Sekarang</span>
+            <span v-if="!isSubmitting">Kirim Info ke WhatsApp Saya</span>
             <span v-else class="flex items-center justify-center gap-2">
               <span class="btn-loader"></span>
               Memproses...
             </span>
           </button>
 
-          <!-- TRUST -->
           <p class="text-xs text-center text-gray-500">
             Data Anda aman dan hanya digunakan untuk keperluan PMB
           </p>
         </form>
 
-        <!-- SUCCESS STATE (TANPA LOADING) -->
         <div
           v-else
           class="p-6 text-center border border-green-200 bg-green-50 rounded-xl"
@@ -149,8 +139,8 @@ async function onSubmit() {
           </p>
 
           <p class="mt-2 text-sm text-green-600">
-            Tim PMB STIKes Bogor Husada akan menghubungi Anda melalui WhatsApp
-            berdasarkan data yang telah dikirim.
+            Tim PMB akan segera menghubungi Anda melalui WhatsApp untuk info
+            biaya kuliah dan cara klaim laptop gratisnya.
           </p>
         </div>
       </div>
