@@ -4,9 +4,6 @@ export default defineNuxtConfig({
   app: {
     baseURL: "/",
 
-    /* =========================
-       META PIXEL (JANGAN DIUBAH)
-    ========================= */
     head: {
       script: [
         {
@@ -50,25 +47,19 @@ export default defineNuxtConfig({
     },
   },
 
-  /* =========================
-     RUNTIME CONFIG (FIXED)
-  ========================= */
   runtimeConfig: {
-    // 🔒 SERVER ONLY (AMAN)
-    GS_CLIENT_EMAIL: process.env.GS_CLIENT_EMAIL,
-    GS_PRIVATE_KEY: process.env.GS_PRIVATE_KEY,
-    GS_SPREADSHEET_ID: process.env.GS_SPREADSHEET_ID,
-    WABLAS_API_KEY: process.env.WABLAS_API_KEY,
-    WABLAS_SECRET_KEY: process.env.WABLAS_SECRET_KEY,
-    WABLAS_ADMIN_WA: process.env.WABLAS_ADMIN_WA,
-
-    // 🌍 CLIENT PUBLIC
     public: {
       metaPixelId: process.env.NUXT_PUBLIC_META_PIXEL_ID,
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || "https://sbh.ac.id",
       imageBaseUrl:
         process.env.NUXT_PUBLIC_IMAGE_BASE_URL || "https://sbh.ac.id",
-      API_URL_BASE: process.env.API_URL_BASE || "https://join.sbh.ac.id",
+      API_URL_BASE:
+        process.env.NUXT_PUBLIC_PMB_API_BASE_URL ||
+        (process.env.NODE_ENV === "development"
+          ? "http://127.0.0.1:8001"
+          : undefined) ||
+        process.env.API_URL_BASE ||
+        "https://join.sbh.ac.id",
     },
   },
 

@@ -1,18 +1,14 @@
 <template>
   <div class="flex flex-col min-h-screen">
     <AppHeader />
-    <main class="flex items-center justify-center flex-1">
+    <main class="flex-1">
       <HeroSection />
-      <!-- <FormulirSection /> -->
     </main>
-    <!-- <FormulirSection /> -->
-    <!-- <BeritaMahasiswa /> -->
     <CallToAction />
-    <FormulirWaSection />
     <SejarahSection />
     <ProgramStudiSection />
     <KeunggulanSection />
-    <TestimoniSlider />
+    <LandingVideoSlider />
     <LogoKemitraan />
     <AppFooter />
     <BackToTopButton />
@@ -28,13 +24,6 @@ useHead({
       name: "description",
       content:
         "Selamat datang di halaman resmi Penerimaan Mahasiswa Baru STIKes Bogor Husada. Daftar sekarang untuk memulai perjalanan pendidikan kesehatan Anda bersama kami!",
-    },
-  ],
-  script: [
-    {
-      src: "https://cdn.watzap.id/widget-api.js",
-      async: true,
-      "data-watzapkey": "xgWw1957",
     },
   ],
   link: [

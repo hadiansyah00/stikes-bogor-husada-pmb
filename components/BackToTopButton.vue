@@ -4,7 +4,7 @@
     target="_blank"
     rel="noopener"
     v-show="isVisible"
-    class="fixed z-50 p-3 text-white transition-opacity duration-300 bg-green-500 rounded-full shadow-lg bottom-8 right-8 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
+    class="fixed z-50 p-3 text-white transition-opacity duration-300 bg-green-600 rounded-full shadow-lg bottom-5 right-4 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 sm:bottom-8 sm:right-8"
     aria-label="Chat via WhatsApp"
   >
     <svg
